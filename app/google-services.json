@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "513187896841",
+    "project_id": "flashcardapp-25701",
+    "storage_bucket": "flashcardapp-25701.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:513187896841:android:420cf472c8bb216309a2d8",
+        "android_client_info": {
+          "package_name": "com.vanderbilt.flashcardapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "513187896841-b06s9ktkgkfsr7b8bhuo9fkml58htmv0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDCFdOqpdtggWSz_w897a1L0mwSwxuXfGg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "513187896841-b06s9ktkgkfsr7b8bhuo9fkml58htmv0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
