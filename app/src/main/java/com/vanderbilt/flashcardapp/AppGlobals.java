@@ -2,7 +2,6 @@ package com.vanderbilt.flashcardapp;
 
 import android.app.Application;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class AppGlobals extends Application {

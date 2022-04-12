@@ -15,7 +15,7 @@ public class MapConverter {
         for (String s : splitFullString) {
             String[] splitPartialString = s.split("=\\{");
             for (String t : splitPartialString) {
-                if (t.indexOf("=") >= 0) {
+                if (t.contains("=")) {
                     fullMapNonMappedValues.add(t);
                 } else {
                     fullMapKeySet.add(t);
