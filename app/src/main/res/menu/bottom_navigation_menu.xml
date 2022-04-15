@@ -1,0 +1,21 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/sets"
+        android:enabled="true"
+        android:icon="@drawable/sets"
+        android:title="@string/my_sets"/>
+    <item
+        android:id="@+id/study"
+        android:enabled="true"
+        android:icon="@drawable/study"
+        android:title="@string/study" />
+    <item
+        android:id="@+id/add"
+        android:enabled="true"
+        android:icon="@drawable/add"
+        android:title="@string/create_set" />
+</menu>
+
+<!-- <a href="https://www.flaticon.com/free-icons/plus" title="plus icons">Plus icons created by dmitri13 - Flaticon</a>
+<a href="https://www.flaticon.com/free-icons/school" title="school icons">School icons created by bqlqn - Flaticon</a>
+<a href="https://www.flaticon.com/free-icons/card" title="card icons">Card icons created by Freepik - Flaticon</a> -->

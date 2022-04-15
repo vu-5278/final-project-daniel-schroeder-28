@@ -6,4 +6,126 @@
     android:layout_height="match_parent"
     tools:context=".AddSetActivity">
 
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:itemBackground="@color/purple_500"
+        app:itemIconTint="@color/bottom_navigation_menu_colors"
+        app:itemTextColor="@color/bottom_navigation_menu_colors"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:menu="@menu/bottom_navigation_menu" />
+
+    <EditText
+        android:id="@+id/editTextSetName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:hint="@string/set_name"
+        android:importantForAutofill="no"
+        android:inputType="text"
+        android:minHeight="48dp"
+        android:textAlignment="center"
+        android:textColorHint="#757575"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5"/>
+
+    <Button
+        android:id="@+id/buttonNextCard"
+        android:layout_width="wrap_content"
+        android:minWidth="155dp"
+        android:layout_height="wrap_content"
+        android:onClick="nextCard"
+        android:text="@string/next_card"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="@id/guideline"/>
+
+    <Button
+        android:id="@+id/buttonPreviousCard"
+        android:layout_width="wrap_content"
+        android:minWidth="155dp"
+        android:layout_height="wrap_content"
+        android:onClick="previousCard"
+        android:text="@string/previous_card"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="@id/guideline" />
+
+    <Button
+        android:id="@+id/buttonSaveSet"
+        android:layout_width="wrap_content"
+        android:minWidth="155dp"
+        android:layout_height="wrap_content"
+        android:onClick="save"
+        android:text="@string/save_set"
+        app:layout_constraintBottom_toTopOf="@+id/buttonPreviousCard"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="@id/guideline"/>
+
+    <Button
+        android:id="@+id/buttonNewSet"
+        android:layout_width="wrap_content"
+        android:minWidth="155dp"
+        android:layout_height="wrap_content"
+        android:onClick="newSet"
+        android:text="@string/new_set"
+        app:layout_constraintBottom_toTopOf="@+id/buttonPreviousCard"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="@id/guideline"/>
+
+    <EditText
+        android:id="@+id/editTextFrontOfCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
+        android:layout_marginTop="45dp"
+        android:layout_weight="1"
+        android:hint="@string/front_of_card"
+        android:importantForAutofill="no"
+        android:inputType="textMultiLine"
+        android:isScrollContainer="true"
+        android:minHeight="48dp"
+        android:singleLine="false"
+        android:textAlignment="center"
+        android:textSize="14sp"
+        android:maxLines="6"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextSetName"
+        tools:ignore="LabelFor" />
+
+    <EditText
+        android:id="@+id/editTextBackOfCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
+        android:layout_marginBottom="45dp"
+        android:layout_marginTop="45dp"
+        android:layout_weight="1"
+        android:hint="@string/back_of_card"
+        android:importantForAutofill="no"
+        android:inputType="textMultiLine"
+        android:isScrollContainer="true"
+        android:minHeight="48dp"
+        android:singleLine="false"
+        android:textAlignment="center"
+        android:textSize="14sp"
+        android:maxLines="6"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextFrontOfCard"
+        tools:ignore="LabelFor" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,11 +1,10 @@
 <resources>
-    <string name="app_name">FlashCardApp</string>
+    <string name="app_name">Study Buddy</string>
     <string name="new_user_sign_up_here">New user? Sign up here</string>
     <string name="sign_in">Sign In</string>
     <string name="username_or_password_is_incorrect">Username or password is incorrect</string>
     <string name="username">Username</string>
     <string name="password">Password</string>
-    <string name="welcome">Welcome</string>
     <string name="please_enter_a_username_and_password">Please enter a username and password</string>
     <string name="sign_up">Sign Up!</string>
     <string name="re_enter_password">Re-Enter Password</string>
@@ -15,13 +14,19 @@
     <string name="please_fill_in_all_fields">Please fill in all fields</string>
     <string name="an_error_has_occured">An error has occured</string>
     <string name="username_is_already_in_use">Username is already in use</string>
-    <string name="filter">Filter</string>
-    <string name="search">Search</string>
-    <string name="give_me_a_recipe">Give me a recipe!</string>
-    <string name="find_a_new_recipe">New Recipe</string>
-    <string name="favorite_recipes">Favorite Recipes:</string>
-    <string name="view_recipe">View Recipe</string>
-    <string name="unfavorite">Unfavorite</string>
-    <string name="favorite">Favorite</string>
-    <string name="add_filters">Add Filters</string>
+    <string name="my_sets">My Sets</string>
+    <string name="create_set">Create Set</string>
+    <string name="study">Study</string>
+    <string name="user_sets">My Sets</string>
+    <string name="welcome">Welcome</string>
+    <string name="set_name">Set Name</string>
+    <string name="next_card">Next Card</string>
+    <string name="previous_card">Previous Card</string>
+    <string name="back_of_card">Back of Card</string>
+    <string name="front_of_card">Front of Card</string>
+    <string name="save_set">Save Set</string>
+    <string name="edit_set">Edit</string>
+    <string name="view">View</string>
+    <string name="new_set">New Set</string>
+    <string name="email">Email</string>
 </resources>

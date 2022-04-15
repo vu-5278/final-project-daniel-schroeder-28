@@ -6,14 +6,17 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class LoginScreenActivity extends AppCompatActivity {
 
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +28,8 @@ public class LoginScreenActivity extends AppCompatActivity {
 
         TextView textView = findViewById(R.id.newUserTextView);
         textView.setOnClickListener((this::newUser));
+
+        mAuth = FirebaseAuth.getInstance();
     }
 
     /**
@@ -32,32 +37,29 @@ public class LoginScreenActivity extends AppCompatActivity {
      * @param v - View
      */
     public void login(View v) {
-        findViewById(R.id.blankUserOrPassTextView).setAlpha(0);
-        findViewById(R.id.incorrectUserOrPassTextView).setAlpha(0);
-        String user = ((EditText) findViewById(R.id.editTextTextPersonName)).getText().toString();
+        findViewById(R.id.textViewRandomError).setAlpha(0);
         String pass = ((EditText) findViewById(R.id.editTextTextPassword)).getText().toString();
+        String email = ((EditText) findViewById(R.id.editTextEmail)).getText().toString();
 
-        if (user.length() > 0 && pass.length() > 0) {
-            DocumentReference docRef = db.collection("users").document(user);
-            docRef.get().addOnCompleteListener(task -> {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists() && pass.equals(document.getData().get("password"))) {
-                        MapConverter.convertStringToMap(document.getData().get("sets").toString());
-                        AppGlobals.setUserSets(MapConverter.convertStringToMap(document.getData().get("sets").toString()));
-                        Intent intent = new Intent(LoginScreenActivity.this, MySetsActivity.class);
-                        intent.putExtra("username", user);
-                        intent.putExtra("user_sets", AppGlobals.getUserSets());
-                        startActivity(intent);
-                    } else {
-                        findViewById(R.id.incorrectUserOrPassTextView).setAlpha(1);
-                    }
-                } else {
-                    findViewById(R.id.incorrectUserOrPassTextView).setAlpha(1);
-                }
-            });
+        if (email.length() > 0 && pass.length() > 0) {
+            mAuth.signInWithEmailAndPassword(email, pass)
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                FirebaseUser user = mAuth.getCurrentUser();
+                                Intent intent = new Intent(LoginScreenActivity.this, MySetsActivity.class);
+                                intent.putExtra("user", user);
+                                startActivity(intent);
+                            } else {
+                                ((TextView) findViewById(R.id.textViewRandomError)).setText(task.getException().getMessage());
+                                findViewById(R.id.textViewRandomError).setAlpha(1);
+                            }
+                        }
+                    });
         } else {
-            findViewById(R.id.blankUserOrPassTextView).setAlpha(1);
+            ((TextView) findViewById(R.id.textViewRandomError)).setText("Please enter all fields");
+            findViewById(R.id.textViewRandomError).setAlpha(1);
         }
     }
 

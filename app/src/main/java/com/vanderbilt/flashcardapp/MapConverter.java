@@ -5,7 +5,18 @@ import java.util.HashMap;
 
 public class MapConverter {
 
+    /**
+     * converts a string representation of a map into an actual map
+     * Useful for db queries as they come back as strings but maps are easier to manipulate
+     * @param inputString - The string to convert, must be in format {Title={Test=Test}} OR {Title={Test2=Test2}, Title2={Test3=Test3,Test4=Test4}} etc
+     *                    basically a map withing a map
+     * @return - The map of the string representation
+     */
     public static HashMap<String, HashMap<String,String>> convertStringToMap(String inputString) {
+        if (inputString.length() == 0) {
+            return new HashMap<>();
+        }
+
         HashMap<String,HashMap<String,String>> fullMap = new HashMap<>();
         String[] splitFullString = inputString.substring(1,inputString.length()-2).split("\\},");
 
