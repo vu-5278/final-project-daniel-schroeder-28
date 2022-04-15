@@ -9,7 +9,9 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.auth.FirebaseUser;
-
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 
 public class MySetsActivity extends AppCompatActivity {
@@ -17,6 +19,7 @@ public class MySetsActivity extends AppCompatActivity {
 
     public static RecyclerView recyclerView;
     public FirebaseUser user;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -24,15 +27,27 @@ public class MySetsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_sets);
 
-        Intent intent = getIntent();
-        user = intent.getParcelableExtra("user");
+        user = AppGlobals.getUser();
 
         recyclerView = findViewById(R.id.recyclerViewUserSets);
-        if (AppGlobals.getUserSets().size() > 0) {
-            FlashcardSetsAdapter adapter = new FlashcardSetsAdapter(new ArrayList<>(AppGlobals.getUserSets().keySet()));
-            recyclerView.setAdapter(adapter);
-            recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        }
+        DocumentReference docRef = db.collection("users").document(user.getUid());
+        docRef.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot document = task.getResult();
+                if (document.exists()) {
+                    AppGlobals.setUserSets(MapConverter.convertStringToMap(document.getData().get("sets").toString()));
+                    if (AppGlobals.getUserSets()!= null && AppGlobals.getUserSets().size() > 0) {
+                        FlashcardSetsAdapter adapter = new FlashcardSetsAdapter(new ArrayList<>(AppGlobals.getUserSets().keySet()));
+                        recyclerView.setAdapter(adapter);
+                        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+                    }
+                } else {
+                    AppGlobals.setUserSets(null);
+                }
+            } else {
+                AppGlobals.setUserSets(null);
+            }
+        });
 
         NavigationBarView navBar = findViewById(R.id.bottom_navigation);
         navBar.setSelectedItemId(R.id.sets);
@@ -50,12 +65,10 @@ public class MySetsActivity extends AppCompatActivity {
                 return false;
             case (R.id.study):
                 Intent intentStudy = new Intent(this, StudyActivity.class);
-                intentStudy.putExtra("user", user);
                 startActivity(intentStudy);
                 break;
             case (R.id.add):
                 Intent intentAddSet = new Intent(this, AddSetActivity.class);
-                intentAddSet.putExtra("user", user);
                 startActivity(intentAddSet);
                 break;
         }

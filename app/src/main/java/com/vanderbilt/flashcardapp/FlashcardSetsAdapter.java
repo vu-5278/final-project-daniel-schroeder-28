@@ -40,7 +40,6 @@ public class FlashcardSetsAdapter extends RecyclerView.Adapter<FlashcardSetsAdap
             @Override
             public void onEdit(int p) {
                 TextView textView = MySetsActivity.recyclerView.getLayoutManager().findViewByPosition(p).findViewById(R.id.textViewSetName);
-                AppGlobals.setUnfinishedSet(AppGlobals.getUnfinishedSetFromSetName(textView.getText().toString()));
 
                 Intent intentEdit = new Intent(context, AddSetActivity.class);
                 intentEdit.putExtra("editingExistingSet",true);

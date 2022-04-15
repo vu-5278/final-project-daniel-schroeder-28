@@ -37,8 +37,10 @@ public class AddSetActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_set);
 
+        user = AppGlobals.getUser();
         Intent intent = getIntent();
-        user = intent.getParcelableExtra("user");
+        editingExistingSet = intent.getBooleanExtra("editingExistingSet", false);
+        existingSetName = intent.getStringExtra("existingSetName");
 
         NavigationBarView navBar = findViewById(R.id.bottom_navigation);
         navBar.setSelectedItemId(R.id.add);
@@ -57,16 +59,35 @@ public class AddSetActivity extends AppCompatActivity {
         buttonNewSet.setOnClickListener(this::newSet);
 
         editTextFrontOfCard = findViewById(R.id.editTextFrontOfCard);
+        editTextFrontOfCard.setOnFocusChangeListener((v, hasFocus) -> {
+            if (!hasFocus) {
+                String key = "";
+                for (String k : flashcardList.get(index).keySet()) {
+                    key = k;
+                }
+                if (!editTextFrontOfCard.getText().toString().equals(key)) {
+                    saved = false;
+                }
+            }
+        });
         editTextBackOfCard = findViewById(R.id.editTextBackOfCard);
+        editTextBackOfCard.setOnFocusChangeListener((v, hasFocus) -> {
+            if (!hasFocus) {
+                String key = "";
+                for (String k : flashcardList.get(index).keySet()) {
+                    key = k;
+                }
+                if (!editTextBackOfCard.getText().toString().equals(key)) {
+                    saved = false;
+                }
+            }
+        });
         editTextSetName = findViewById(R.id.editTextSetName);
-
-        editingExistingSet = intent.getBooleanExtra("editingExistingSet", false);
-        existingSetName = intent.getStringExtra("existingSetName");
 
         saved = true;
 
-        if (AppGlobals.getUnfinishedSet() != null && !AppGlobals.getUnfinishedSet().isEmpty()) {
-            openSet(AppGlobals.getUnfinishedSet());
+        if (editingExistingSet) {
+            openSet(existingSetName);
         } else {
             index = 0;
             flashcardList = new ArrayList<>();
@@ -82,29 +103,6 @@ public class AddSetActivity extends AppCompatActivity {
      * @return - true or false
      */
     private boolean navigate(MenuItem menuItem) {
-        HashMap<String,String> tempMap = new HashMap<>();
-        String front = editTextFrontOfCard.getText().toString();
-        String back = editTextBackOfCard.getText().toString();
-        if (back.equals("")) {
-            back = "BLANK";
-        }
-        if (front.equals("")) {
-            front = "BLANK";
-        }
-        tempMap.put(front,back);
-        flashcardList.set(index, tempMap);
-
-        HashMap<String,ArrayList<HashMap<String,String>>> compareMap = new HashMap<String,ArrayList<HashMap<String,String>>>(){{
-            put(editTextSetName.getText().toString(),flashcardList);
-        }};
-
-        System.out.println("RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR: " + compareMap);
-        System.out.println("RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR: " + AppGlobals.getUnfinishedSet());
-
-        if (!compareMap.equals(AppGlobals.getUnfinishedSet())) {
-            saved = false;
-        }
-
         if (!saved) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setMessage("Please save before leaving page");
@@ -118,12 +116,10 @@ public class AddSetActivity extends AppCompatActivity {
             switch (menuItem.getItemId()) {
                 case (R.id.sets):
                     Intent intentMySets = new Intent(this, MySetsActivity.class);
-                    intentMySets.putExtra("user", user);
                     startActivity(intentMySets);
                     break;
                 case (R.id.study):
                     Intent intentStudy = new Intent(this, StudyActivity.class);
-                    intentStudy.putExtra("user", user);
                     startActivity(intentStudy);
                     break;
                 case (R.id.add):
@@ -136,15 +132,7 @@ public class AddSetActivity extends AppCompatActivity {
 
     public void nextCard(View v) {
         HashMap<String,String> tempMap = new HashMap<>();
-        String front = editTextFrontOfCard.getText().toString();
-        String back = editTextBackOfCard.getText().toString();
-        if (back.equals("")) {
-            back = "BLANK";
-        }
-        if (front.equals("")) {
-            front = "BLANK";
-        }
-        tempMap.put(front,back);
+        tempMap.put(editTextFrontOfCard.getText().toString(),editTextBackOfCard.getText().toString());
         flashcardList.set(index, tempMap);
         index++;
         if (flashcardList.size() < index + 1) {
@@ -160,23 +148,12 @@ public class AddSetActivity extends AppCompatActivity {
             }
             editTextFrontOfCard.setText(frontText);
             editTextBackOfCard.setText(flashcardList.get(index).get(frontText));
-            AppGlobals.setUnfinishedSet(new HashMap<String,ArrayList<HashMap<String,String>>>(){{
-                put(editTextSetName.getText().toString(),flashcardList);
-            }});
         }
     }
 
     public void previousCard(View v) {
         HashMap<String,String> tempMap = new HashMap<>();
-        String front = editTextFrontOfCard.getText().toString();
-        String back = editTextBackOfCard.getText().toString();
-        if (back.equals("")) {
-            back = "BLANK";
-        }
-        if (front.equals("")) {
-            front = "BLANK";
-        }
-        tempMap.put(front,back);
+        tempMap.put(editTextFrontOfCard.getText().toString(),editTextBackOfCard.getText().toString());
         flashcardList.set(index, tempMap);
         if (index == 0) {
             return;
@@ -188,9 +165,6 @@ public class AddSetActivity extends AppCompatActivity {
         }
         editTextFrontOfCard.setText(frontText);
         editTextBackOfCard.setText(flashcardList.get(index).get(frontText));
-        AppGlobals.setUnfinishedSet(new HashMap<String,ArrayList<HashMap<String,String>>>(){{
-            put(editTextSetName.getText().toString(),flashcardList);
-        }});
     }
 
     public void newSet(View v) {
@@ -208,22 +182,19 @@ public class AddSetActivity extends AppCompatActivity {
             editTextSetName.setText("");
             editTextFrontOfCard.setText("");
             editTextBackOfCard.setText("");
+            editingExistingSet =  false;
+            existingSetName = "";
         });
         builder.setNegativeButton("No", (dialog, which) -> dialog.cancel());
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
-        AppGlobals.setUnfinishedSet(null);
     }
 
-    private void openSet(HashMap<String, ArrayList<HashMap<String,String>>> unfinishedSet) {
+    private void openSet(String unfinishedSetName) {
         index = 0;
         flashcardList = new ArrayList<>();
 
-        String setName = "";
-        for (String key : unfinishedSet.keySet()) {
-            setName = key;
-        }
-        flashcardList = unfinishedSet.get(setName);
+        flashcardList = AppGlobals.getUserSets().get(unfinishedSetName);
 
         for (HashMap<String,String> hm : flashcardList) {
             for (String key : hm.keySet()) {
@@ -237,72 +208,91 @@ public class AddSetActivity extends AppCompatActivity {
             front = key;
         }
 
-        editTextSetName.setText(setName);
+        editTextSetName.setText(unfinishedSetName);
         editTextFrontOfCard.setText(front);
         editTextBackOfCard.setText(flashcardList.get(index).get(front));
-        AppGlobals.setUnfinishedSet(unfinishedSet);
     }
 
     public void save(View v) {
+        boolean removeExistingFromDb = false;
+        boolean badData = false;
         HashMap<String,String> tempMap = new HashMap<>();
-        String front = editTextFrontOfCard.getText().toString();
-        String back = editTextBackOfCard.getText().toString();
-        if (back.equals("")) {
-            back = "BLANK";
-        }
-        if (front.equals("")) {
-            front = "BLANK";
-        }
-        tempMap.put(front,back);
+        tempMap.put(editTextFrontOfCard.getText().toString(),editTextBackOfCard.getText().toString());
         flashcardList.set(index, tempMap);
-        HashMap<String,String> flashcardMap = new HashMap<>();
+
+
         for (int i = 0; i < flashcardList.size(); i++) {
-            flashcardMap.putAll(flashcardList.get(i));
+            if (flashcardList.get(i).containsKey("") && flashcardList.get(i).containsValue("") && flashcardList.size() == 1) {
+                saved = true;
+                return;
+            } else if (flashcardList.get(i).containsKey("") && flashcardList.get(i).containsValue("") && flashcardList.size() > 1) {
+                flashcardList.remove(i);
+                i--;
+            } else if (flashcardList.get(i).containsKey("") || flashcardList.get(i).containsValue("")) {
+                badData = true;
+            }
         }
-        String setName = editTextSetName.getText().toString();
-        if (setName.equals("")) {
-            editTextSetName.setHint("Please enter a set name");
-            editTextSetName.setHintTextColor(getResources().getColor(R.color.red));
-            editTextSetName.requestFocus();
-            return;
-        } else if (editingExistingSet && AppGlobals.getUserSets().containsKey(setName)) {
-            AppGlobals.addToUserSets(setName,flashcardMap);
-        } else if (!editingExistingSet && AppGlobals.getUserSets().containsKey(setName)) {
+
+        if (badData) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setMessage("If you save, this set will be combined with another with the same name. Are you sure you want to continue?");
-            builder.setTitle("Wait!");
+            builder.setMessage("Set contains one or more blank fronts and/or backs. Please fix before saving");
+            builder.setTitle("Error");
             builder.setCancelable(false);
 
-            builder.setPositiveButton("Yes", (dialog, which) -> AppGlobals.addToUserSets(setName,flashcardMap));
-            builder.setNegativeButton("No", (dialog, which) -> dialog.cancel());
+            builder.setPositiveButton("Ok", (dialog, which) -> dialog.cancel());
             AlertDialog alertDialog = builder.create();
             alertDialog.show();
-        } else if (editingExistingSet && !existingSetName.equals(setName)) {
-            DocumentReference docRef = db.collection("users").document(user.getUid());
-            Map<String, Object> deleteFromDb = new HashMap<>();
-            deleteFromDb.put("sets." + existingSetName, FieldValue.delete());
-            docRef.update(deleteFromDb);
-            AppGlobals.addToUserSets(setName,flashcardMap);
-            AppGlobals.removeFromUserSets(existingSetName);
         } else {
-            AppGlobals.addToUserSets(setName,flashcardMap);
-        }
+            String setName = editTextSetName.getText().toString();
+            if (setName.equals("")) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setMessage("Set is missing a name, please enter one to continue");
+                builder.setTitle("Error");
+                builder.setCancelable(false);
 
-        AppGlobals.setUnfinishedSet(new HashMap<String,ArrayList<HashMap<String,String>>>(){{
-            put(editTextSetName.getText().toString(),flashcardList);
-        }});
+                builder.setPositiveButton("Ok", (dialog, which) -> dialog.cancel());
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
+                return;
+            } else if (editingExistingSet && AppGlobals.getUserSets().containsKey(setName)) {
+                AppGlobals.addToUserSets(setName,flashcardList);
+            } else if (!editingExistingSet && AppGlobals.getUserSets().containsKey(setName)) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setMessage("If you save, this set will be combined with another with the same name. Are you sure you want to continue?");
+                builder.setTitle("Wait!");
+                builder.setCancelable(false);
 
-        DocumentReference docRef = db.collection("users").document(user.getUid());
-        docRef.get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                DocumentSnapshot document = task.getResult();
-                if (document.exists()) {
-                    Map<String, Object> fieldsMap = new HashMap<>();
-                    fieldsMap.put("sets", AppGlobals.getUserSets());
-                    docRef.set(fieldsMap, SetOptions.merge());
-                }
+                builder.setPositiveButton("Yes", (dialog, which) -> AppGlobals.addToUserSets(setName,flashcardList));
+                builder.setNegativeButton("No", (dialog, which) -> dialog.cancel());
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
+            } else if (editingExistingSet && !existingSetName.equals(setName)) {
+                removeExistingFromDb = true;
+                AppGlobals.addToUserSets(setName,flashcardList);
+                AppGlobals.removeFromUserSets(existingSetName);
+            } else {
+                AppGlobals.addToUserSets(setName,flashcardList);
             }
-        });
-        saved = true;
+
+            DocumentReference docRef = db.collection("users").document(user.getUid());
+            docRef.get().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        Map<String, Object> fieldsMap = new HashMap<>();
+                        fieldsMap.put("sets", AppGlobals.getUserSets());
+                        docRef.set(fieldsMap, SetOptions.merge());
+                    }
+                }
+            });
+
+            if (removeExistingFromDb) {
+                Map<String, Object> deleteFromDb = new HashMap<>();
+                deleteFromDb.put("sets." + existingSetName, FieldValue.delete());
+                docRef.update(deleteFromDb);
+            }
+
+            saved = true;
+        }
     }
 }

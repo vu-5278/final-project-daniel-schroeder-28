@@ -17,8 +17,7 @@ public class StudyActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_study);
 
-        Intent intent = getIntent();
-        user = intent.getParcelableExtra("user");
+        user = AppGlobals.getUser();
 
         NavigationBarView navBar = findViewById(R.id.bottom_navigation);
         navBar.setSelectedItemId(R.id.study);

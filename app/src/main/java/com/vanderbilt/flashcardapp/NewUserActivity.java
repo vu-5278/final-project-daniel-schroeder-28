@@ -70,8 +70,8 @@ public class NewUserActivity extends AppCompatActivity {
                                     HashMap<String, String> fieldsMap = new HashMap<>();
                                     fieldsMap.put("uid", user.getUid());
                                     docRef.set(fieldsMap).addOnSuccessListener(documentReference -> {
+                                        AppGlobals.setUser(user);
                                         Intent intent = new Intent(NewUserActivity.this, MySetsActivity.class);
-                                        intent.putExtra("user", user);
                                         startActivity(intent);
                                     });
                                 }

@@ -48,8 +48,8 @@ public class LoginScreenActivity extends AppCompatActivity {
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
                                 FirebaseUser user = mAuth.getCurrentUser();
+                                AppGlobals.setUser(user);
                                 Intent intent = new Intent(LoginScreenActivity.this, MySetsActivity.class);
-                                intent.putExtra("user", user);
                                 startActivity(intent);
                             } else {
                                 ((TextView) findViewById(R.id.textViewRandomError)).setText(task.getException().getMessage());
