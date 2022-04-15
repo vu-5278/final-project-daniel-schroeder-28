@@ -68,7 +68,7 @@ public class NewUserActivity extends AppCompatActivity {
                             docRef.get().addOnCompleteListener(newDocTask -> {
                                 if (newDocTask.isSuccessful()) {
                                     HashMap<String, String> fieldsMap = new HashMap<>();
-                                    fieldsMap.put("uid", user.getUid());
+                                    fieldsMap.put("sets", "");
                                     docRef.set(fieldsMap).addOnSuccessListener(documentReference -> {
                                         AppGlobals.setUser(user);
                                         Intent intent = new Intent(NewUserActivity.this, MySetsActivity.class);

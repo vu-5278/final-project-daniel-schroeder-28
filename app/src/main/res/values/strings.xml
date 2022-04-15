@@ -29,4 +29,5 @@
     <string name="view">View</string>
     <string name="new_set">New Set</string>
     <string name="email">Email</string>
+    <string name="tap_card_to_flip">Tap card to flip</string>
 </resources>

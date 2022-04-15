@@ -17,17 +17,64 @@
         app:menu="@menu/bottom_navigation_menu" />
 
     <TextView
-        android:id="@+id/textViewWelcomeUser"
+        android:id="@+id/textStudyInstructions"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingStart="10dp"
         android:paddingTop="10dp"
         android:paddingEnd="10dp"
-        android:text="Study"
+        android:text="@string/tap_card_to_flip"
         android:textAlignment="viewStart"
         android:textAllCaps="false"
-        android:textSize="34sp"
+        android:textSize="20sp"
         app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textViewCurrentCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
+        android:layout_marginBottom="100dp"
+        android:background="@drawable/border"
+        android:clickable="true"
+        android:maxHeight="300dp"
+        android:minHeight="200dp"
+        android:gravity="center"
+        app:layout_constraintBottom_toTopOf="@id/bottom_navigation"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textStudyInstructions" />
+
+    <Button
+        android:id="@+id/buttonNextCard"
+        android:layout_width="wrap_content"
+        android:minWidth="155dp"
+        android:layout_height="wrap_content"
+        android:onClick="nextStudyCard"
+        android:text="@string/next_card"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="@id/guideline"/>
+
+    <Button
+        android:id="@+id/buttonPreviousCard"
+        android:layout_width="wrap_content"
+        android:minWidth="155dp"
+        android:layout_height="wrap_content"
+        android:onClick="previousStudyCard"
+        android:text="@string/previous_card"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="@id/guideline" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
