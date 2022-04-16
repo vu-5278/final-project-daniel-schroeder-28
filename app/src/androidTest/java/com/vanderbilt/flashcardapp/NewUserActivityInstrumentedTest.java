@@ -42,7 +42,7 @@ public class NewUserActivityInstrumentedTest {
     public ActivityScenarioRule<NewUserActivity> activityScenarioRule = new ActivityScenarioRule<>(NewUserActivity.class);
 
     @Test
-    public void changeText_NewUserActivity() {
+    public void test_NewUserActivity() {
         onView(withId(R.id.editTextEmail)).perform(typeText(STRING_TO_BE_TYPED), closeSoftKeyboard());
         onView(withId(R.id.editTextEmail)).check(matches(withText(STRING_TO_BE_TYPED)));
 

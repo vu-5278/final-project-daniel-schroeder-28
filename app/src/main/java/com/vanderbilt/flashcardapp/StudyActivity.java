@@ -67,10 +67,10 @@ public class StudyActivity extends AppCompatActivity {
     }
 
     public void previousStudyCard(View view) {
-        front = true;
         if (index == 0) {
             return;
         }
+        front = true;
         index--;
         String frontText = "";
         for (String k : flashcardList.get(index).keySet()) {
@@ -81,10 +81,10 @@ public class StudyActivity extends AppCompatActivity {
     }
 
     public void nextStudyCard(View view) {
-        front = true;
         if (flashcardList.size() <= index + 1) {
             return;
         }
+        front = true;
         index++;
         String frontText = "";
         for (String k : flashcardList.get(index).keySet()) {

@@ -38,7 +38,7 @@ public class LoginScreenActivityInstrumentedTest {
     public ActivityScenarioRule<LoginScreenActivity> activityScenarioRule = new ActivityScenarioRule<>(LoginScreenActivity.class);
 
     @Test
-    public void changeText_LoginScreenActivity() {
+    public void test_LoginScreenActivity() {
         onView(withId(R.id.editTextEmail)).perform(typeText(STRING_TO_BE_TYPED), closeSoftKeyboard());
         onView(withId(R.id.editTextEmail)).check(matches(withText(STRING_TO_BE_TYPED)));
 
