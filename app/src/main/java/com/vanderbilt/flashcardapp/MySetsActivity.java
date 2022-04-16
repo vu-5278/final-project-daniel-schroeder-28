@@ -30,24 +30,30 @@ public class MySetsActivity extends AppCompatActivity {
         user = AppGlobals.getUser();
 
         recyclerView = findViewById(R.id.recyclerViewUserSets);
-        DocumentReference docRef = db.collection("users").document(user.getUid());
-        docRef.get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                DocumentSnapshot document = task.getResult();
-                if (document.exists()) {
-                    AppGlobals.setUserSets(MapConverter.convertStringToMap(document.getData().get("sets").toString()));
-                    if (AppGlobals.getUserSets()!= null && AppGlobals.getUserSets().size() > 0) {
-                        FlashcardSetsAdapter adapter = new FlashcardSetsAdapter(new ArrayList<>(AppGlobals.getUserSets().keySet()));
-                        recyclerView.setAdapter(adapter);
-                        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        if (user != null) {
+            DocumentReference docRef = db.collection("users").document(user.getUid());
+            docRef.get().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        AppGlobals.setUserSets(MapConverter.convertStringToMap(document.getData().get("sets").toString()));
+                        if (AppGlobals.getUserSets()!= null && AppGlobals.getUserSets().size() > 0) {
+                            FlashcardSetsAdapter adapter = new FlashcardSetsAdapter(new ArrayList<>(AppGlobals.getUserSets().keySet()));
+                            recyclerView.setAdapter(adapter);
+                            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+                        }
+                    } else {
+                        AppGlobals.setUserSets(null);
                     }
                 } else {
                     AppGlobals.setUserSets(null);
                 }
-            } else {
-                AppGlobals.setUserSets(null);
-            }
-        });
+            });
+        } else {
+            FlashcardSetsAdapter adapter = new FlashcardSetsAdapter(new ArrayList<>(AppGlobals.getUserSets().keySet()));
+            recyclerView.setAdapter(adapter);
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        }
 
         NavigationBarView navBar = findViewById(R.id.bottom_navigation);
         navBar.setSelectedItemId(R.id.sets);

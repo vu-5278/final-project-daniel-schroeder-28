@@ -8,7 +8,7 @@ public class MapConverter {
     /**
      * converts a string representation of a map into an actual map
      * Useful for db queries as they come back as strings but maps are easier to manipulate
-     * @param inputString - The string to convert, must be in format {real=[{fsda=sdf }, {qer=qwer}, {qwrqw=qrwq}], rea=[{fsda=sdf }, {qer=qwer}, {qwrqw=qrwq}]}
+     * @param inputString - The string to convert, must be in format {test=[{testFront1=testBack1}, {testFront2=testBack2}, {testFront3=testBack3}], Food=[{Bread=Grain}, {Milk=Dairy}]}
      *                    basically a list of maps within a map
      * @return - The map of the string representation
      */
