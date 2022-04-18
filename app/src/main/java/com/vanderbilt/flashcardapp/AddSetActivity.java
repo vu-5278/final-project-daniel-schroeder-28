@@ -193,6 +193,8 @@ public class AddSetActivity extends AppCompatActivity {
     private void openSet(String unfinishedSetName) {
         index = 0;
         flashcardList = new ArrayList<>();
+        editingExistingSet = true;
+        existingSetName = unfinishedSetName;
 
         flashcardList = AppGlobals.getUserSets().get(unfinishedSetName);
 
@@ -262,7 +264,12 @@ public class AddSetActivity extends AppCompatActivity {
                 builder.setTitle("Wait!");
                 builder.setCancelable(false);
 
-                builder.setPositiveButton("Yes", (dialog, which) -> AppGlobals.addToUserSets(setName,flashcardList));
+                builder.setPositiveButton("Yes", (dialog, which) -> {
+                    ArrayList<HashMap<String,String>> tempFlashcardList = (ArrayList<HashMap<String, String>>) flashcardList.clone();
+                    openSet(setName);
+                    flashcardList.addAll(tempFlashcardList);
+                    AppGlobals.addToUserSets(setName,flashcardList);
+                });
                 builder.setNegativeButton("No", (dialog, which) -> dialog.cancel());
                 AlertDialog alertDialog = builder.create();
                 alertDialog.show();
